@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# sudo -i
+
+echo -e "upgrade system ...\n"
+apt-get update
+apt-get -y upgrade
+
+
+# NGINX
+
+echo -e "install nginx ...\n"
+apt-get install -y nginx
+
+# PHP7
+
+# Istall the package management repositories to install software
+echo -e "install python-software-properties ...\n"
+apt-get install python-software-properties
+apt-get install software-properties-common
+
+#Add a package which have PHP 7
+echo -e "adding ppa with PHP7 ...\n"
+add-apt-repository ppa:ondrej/php
+apt-get update
+
+#Istalling PHP7 and other modules
+echo -e "install PHP7 and modules ...\n"
+apt-get install php7.0 php7.0-fpm php7.0-mysql -y
+apt-get install php7.0-cli php7.0-curl php7.0-gd  
+
+#MySQL
+echo -e "install MySQL ...\n"
+apt-get install mysql-server
+mysql_install_db
+mysql_secure_installation
+
+#Set shrot_tags=On in php.ini
+echo -e "open php short_tags... \n"
+sed -i "s/short_open_tag = Off/short_open_tag = On/g" /etc/php/7.0/fpm/php.ini 
+
+
+#Utilites
+
+echo -e "install git ...\n"
+apt-get install -y git
+
+echo -e "composer install... \n"
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+echo -e "install vim ...\n"
+apt-get install -y vim
+
+#START
+echo -e "start system ...\n"
+service nginx start
+service mysql start
+service php7.0-fpm start
